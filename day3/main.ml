@@ -56,44 +56,34 @@ let parse_part_2 s =
   String.split s ~on:'\n'
   
 let sack_to_int s =
-  String.fold s ~init:0 ~f:(fun acc c -> (1 lsl priority c) lor acc)
+  String.fold s ~init:0 ~f:(fun acc c -> (1 lsl (priority c - 1)) lor acc)
+
+let rec one_pos n =
+  if n = 0 then 0
+  else 1 + one_pos (n lsr 1)
   
-let merge_2 l =
-  List.cartesian_product l l
-  |> List.filter_map ~f:(fun (a, b) -> if a >= b then None else Some (a, b, a land b))
-  
-let has_single_bit n =
-  if n < 0 then failwith "Must be non negative"
-  else if n = 0 then false
-  else
-    n land (n - 1) = 0
-  
-let merge_3 m2l l =
-  List.cartesian_product m2l l
-  |> List.filter_map ~f:(fun ((a, b, m2), c) ->
-         if b >= c
-         then None
-         else
-           let m3 = m2 land c in
-           if has_single_bit m3 then
-             Some (a, b, c, m3)
-           else
-             None)
+let find l =
+  List.groupi l ~break:(fun i _ _ -> (i mod 3) = 0)
+  |> List.map ~f:(fun [@warning "-8"] [a; b; c] -> one_pos (a land b land c))
+  |> List.fold ~init:0 ~f:(+)
             
-let merge l =
-  let m2 = merge_2 l in
-  let m3 = merge_3 m2 l in
-  m3
+let part_2 input =
+  let l = parse_part_2 input in
+  let ints = List.map l ~f:sack_to_int in
+  let res = find ints in
+  Printf.printf "Res: %d\n" res
+          
+  
  let _ =
    print_endline "Part 1:";
    print_endline "Small Input";
    part_1 small_input;
    print_endline "Big Input";
-   part_1 big_input(*;
+   part_1 big_input;
    print_endline "Part 2:";
    print_endline "Small Input";
    part_2 small_input;
    print_endline "Big Input";
-   part_2 big_input;  *)
+   part_2 big_input
      
    
