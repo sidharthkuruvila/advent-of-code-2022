@@ -1,8 +1,11 @@
+extern crate core;
+
 mod day1;
 mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 
 fn main() {
     day1::day1();
@@ -14,4 +17,6 @@ fn main() {
     day4::day4();
     println!("\nDay5:");
     day5::day5();
+    println!("\nDay6:");
+    day6::day6();
 }
