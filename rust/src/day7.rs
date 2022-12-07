@@ -1,6 +1,21 @@
 use std::fs;
 use regex::Regex;
 
+/*
+    The approach is to start of the bottom of the tree and do a depth first traversal. The benefit
+    is that you only need to visit each command once. The bottom node ie easy to find it is the
+    last command executed. So you read the commands in reverse.
+
+    The challenge with starting at a bottom node is that you don't know how deep you are in the tree.
+    You need to be able to pop your stack as you go up. The good news is you know that all the elements
+    on the stack will be 0 when you start.
+
+    You can pop the BottomlessStack as many times as you want it will return the zero value once
+    all other values have been consumed. I'm not sure if I need to use a function to build zero
+    values. The challenge  is that I want to get a value and not a reference. And I don't understand
+    move and copy semantics well enough to do values yet.
+ */
+
 static SMALL_INPUT: &str = "$ cd /
 $ ls
 dir a
