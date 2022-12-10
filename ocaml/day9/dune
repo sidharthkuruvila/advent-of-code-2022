@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (libraries core cmdliner re sexplib)
+ (preprocess
+  (pps ppx_compare ppx_sexp_conv)))
