@@ -16,45 +16,35 @@ fn parse(s: &str) -> Vec<Vec<i32>> {
         .collect()
 }
 
-
-const DIRECTIONS: [(i32, i32); 4] = [
-    (0, 1),
-    (0, -1),
-    (1, 0),
-    (-1, 0)
-];
-
 fn dimensions(forrest: &Vec<Vec<i32>>) -> (usize, usize) {
     let width = forrest[0].len();
     let height = forrest.len();
     return (width, height);
 }
 
-fn within_range(forrest: &Vec<Vec<i32>>, x:i32, y:i32) -> bool {
-    let (width, height) = dimensions(forrest);
-    return 0 <= x && x < (width as i32) &&  0 <= y && y < (height as i32)
-}
-
 fn get(forrest: &Vec<Vec<i32>>, x:usize, y:usize) -> i32 {
     return forrest[y][x];
 }
 
-fn is_visible(forrest: &Vec<Vec<i32>>, mut x:usize, mut y: usize) -> bool {
-    println!("Aboud to candidate it x:{}, y:{}", x, y);
-    let height = get(forrest, x, y);
-    for (dx, dy) in DIRECTIONS {
-        while within_range(forrest, tx, ty) {
-            println!("dx:{}, dy:{}", dx, dy);
-            let tx = (x as i32) + dx;
-            let ty = (y as i32) + dy;
-            x = tx as usize;
-            y = ty as usize;
-            if get(forrest, x, y) >= height {
-                return false
-            }
-        }
-    }
-    return true
+fn make_directions(forrest: &Vec<Vec<i32>>, x:usize, y: usize) -> Vec<Vec<i32>> {
+    let forrest_length = forrest.len();
+    let forrest_breadth = forrest[0].len();
+
+    let directions: Vec<Vec<i32>> = vec!(
+        (0..x).rev().map(|i| get(forrest,i, y)).collect(),
+        (0..y).rev().map(|i| get(forrest, x, i)).collect(),
+        ((y+1)..forrest_length).map(|i| get(forrest, x, i)).collect(),
+        ((x+1)..forrest_breadth).map(|i| get(forrest, i, y)).collect(),
+    );
+    return directions;
+}
+
+fn is_visible(forrest: &Vec<Vec<i32>>, x:usize, y: usize) -> bool {
+    let tree_height = get(forrest, x, y);
+    let directions = make_directions(forrest, x, y);
+    return directions.iter().map(|direction| direction.iter()
+        .all(|height| *height < tree_height ))
+        .any(|b| b);
 }
 
 fn get_candidates(forrest: &Vec<Vec<i32>>) -> Vec<(usize, usize)> {
@@ -72,6 +62,24 @@ fn part1(s: &str) {
     println!("Res: {}", total_visibles);
 }
 
+fn calculate_score(forrest: &Vec<Vec<i32>>, x: usize, y: usize) -> i32 {
+    let tree_height = get(forrest, x, y);
+    let directions = make_directions(forrest, x, y);
+    return directions.iter()
+        .map(|direction| direction[0..direction.len() - 1].iter()
+            .take_while(|height| **height < tree_height).count() as i32 + 1)
+        .fold(1, |acc, v|  (acc  * v))
+
+}
+
+fn part2(s: &str) {
+    let forrest = parse(s);
+    let candidates = get_candidates(&forrest);
+
+    let max_score = candidates.iter().map(|(x, y)| calculate_score(&forrest, *x, *y)).max();
+    println!("Res: {}", max_score.unwrap());
+}
+
 pub fn day8(){
     let contents = fs::read_to_string("data/day8_input.txt");
     let big_input = contents.unwrap();
@@ -79,10 +87,10 @@ pub fn day8(){
     println!("Small Input");
     part1(SMALL_INPUT);
     println!("Big Input");
-    part1(big_input.as_str());
-    // println!("Part 2");
-    // println!("Small Input");
-    // part2(SMALL_INPUT);
-    // println!("Big Input");
-    // part2(big_input.as_str());
+    part1(big_input.as_str().trim());
+    println!("Part 2");
+    println!("Small Input");
+    part2(SMALL_INPUT);
+    println!("Big Input");
+    part2(big_input.as_str().trim());
 }
