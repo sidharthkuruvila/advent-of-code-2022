@@ -1,5 +1,7 @@
 extern crate core;
 
+use std::env;
+
 mod day1;
 mod day2;
 mod day3;
@@ -8,8 +10,10 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day9;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
     day1::day1();
     println!("\nDay2:");
     day2::day2();
@@ -25,4 +29,6 @@ fn main() {
     day7::day7();
     println!("\nDay8:");
     day8::day8();
+    println!("\nDay9:");
+    day9::day9();
 }
