@@ -41,10 +41,12 @@ let re = Re.Perl.compile_pat "\\d+|\\[|\\]"
 let parse s =
   let sections = Re.split section_split_re s in
   List.map sections ~f:(fun section ->
-      let [@warning "-8"] [left; right] = String.split section ~on:'\n'
-                           |> List.map ~f:(fun line -> line
-                                                       |>  Re.all re
-                                                       |> List.map ~f:(fun m -> Re.Group.get m 0 |> char_to_token)) in
+      let [@warning "-8"] [left; right] =
+        String.split section ~on:'\n'
+        |> List.map ~f:(fun line -> line
+                                    |>  Re.all re
+                                    |> List.map ~f:(fun m -> Re.Group.get m 0
+                                                             |> char_to_token)) in
     (left, right))
     
                
@@ -89,7 +91,8 @@ let part_2 s =
             |> List.fold_left ~init:1 ~f:( * ) in
   Printf.printf "Res: %d\n" res
                 
-let big_input = In_channel.read_all "day13/input.txt" |> (String.strip ~drop:Char.(fun c -> c = '\n'))
+let big_input = In_channel.read_all "day13/input.txt"
+                |> (String.strip ~drop:Char.(fun c -> c = '\n'))
 
   
  let _ =
