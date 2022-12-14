@@ -28,8 +28,9 @@ fn parse(s: &str) -> Vec<(i32, i32)> {
 
 
 //Draw board is buggy I didn't get time to fix it.
+#[allow(dead_code)]
 fn draw_board(head_position: (i32, i32), knots: &Vec<(i32, i32)>) {
-    let mut knots = knots.clone();
+    let knots = knots.clone();
 
     let min_x = min(0 ,min(*knots.iter().map(|(x, _)| x).min().unwrap(), head_position.0));
     let max_x = max(0, max(*knots.iter().map(|(x, _)| x).min().unwrap(), head_position.0));

@@ -15,7 +15,7 @@ mod day10;
 mod day11;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let _args: Vec<String> = env::args().collect();
     match "11" {
         "1" => {
             println!("\nDay1:");
