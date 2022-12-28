@@ -95,7 +95,7 @@ let [@warning "-32"] part_1_fast s =
   let paths = List.map l ~f:(fun (v, _, ns) -> (v, ns)) |> String.Map.of_alist_exn in
   let rates = List.map l ~f:(fun (v, d, _) -> (v, d)) |> String.Map.of_alist_exn in
   let paths_with_distance = shortest_paths paths rates in
-  Printf.printf "Found shortest paths\n";
+  Printf.printf "Found shortest paths %d\n" (String.Map.length paths_with_distance);
   let closed_valves = String.Map.filter rates  ~f:(fun r -> r > 0) |> String.Map.keys |> String.Set.of_list in
   let actor_1 = Actor_state.{ minutes_remaining = 30; current_room = "AA"; } in
   let start = Cave_state.{ closed_valves; actors = [actor_1]} in
