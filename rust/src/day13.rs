@@ -1,7 +1,5 @@
 use std::cmp::Ordering;
-use std::cmp::Ordering::Equal;
 use std::fs;
-use std::io::BufRead;
 use regex::Regex;
 use crate::day13::Tree::Num;
 
@@ -42,12 +40,10 @@ fn parse_line(s: &str) -> Tree {
         if let Some(_) = captures.get(1) {
             stack.push(vec!());
         } else if let Some(_) = captures.get(2) {
-            let mut l = stack.pop().unwrap();
-            let len = stack.len();
-            let mut last = stack.last_mut().unwrap();
+            let l = stack.pop().unwrap();
+            let last = stack.last_mut().unwrap();
             last.push(Tree::List(l));
         } else if let Some(ns) = captures.get(3) {
-            let len = stack.len();
             let l = stack.last_mut().unwrap();
             l.push(Tree::Num(ns.as_str().parse().unwrap()));
         } else {

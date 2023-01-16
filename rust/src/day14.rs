@@ -1,4 +1,3 @@
-use std::borrow::BorrowMut;
 use std::cmp::{max, min};
 use std::collections::HashSet;
 use std::fs;
@@ -11,11 +10,11 @@ fn connect((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> Vec<(usize, us
     assert!(x1 == x2 || y1 == y2);
     return if x1 == x2 {
         let start: usize = min(y1, y2);
-        let end: usize = (max(y1, y2) + 1);
+        let end: usize = max(y1, y2) + 1;
         (start .. end).map(|y| (x1, y)).collect()
     } else {
         let start: usize = min(x1, x2);
-        let end: usize = (max(x1, x2) + 1);
+        let end: usize = max(x1, x2) + 1;
         (start .. end).map(|x| (x, y1)).collect()
     }
 }
@@ -85,7 +84,7 @@ fn fill(bottom: usize, mut occupieds: HashSet<(usize, usize)>) -> usize {
 
     loop {
         let position = drop(bottom, &occupieds);
-        let (x, y) = position;
+        let (_, y) = position;
         if y == (bottom - 1) {
             return count;
         } else {
@@ -96,9 +95,8 @@ fn fill(bottom: usize, mut occupieds: HashSet<(usize, usize)>) -> usize {
 }
 
 fn part_1(s: &str) {
-    let mut occupieds = parse(s);
-    let bottom = occupieds.iter().map(|(x, y)| y).max().unwrap() + 2;
-    let ov: Vec<(usize, usize)> = occupieds.clone().into_iter().collect();
+    let occupieds = parse(s);
+    let bottom = occupieds.iter().map(|(_, y)| y).max().unwrap() + 2;
     let count = fill(bottom, occupieds);
     println!("Res: {}", count);
 }
