@@ -15,10 +15,11 @@ mod day10;
 mod day11;
 mod day12;
 mod day13;
+mod day14;
 
 fn main() {
     let _args: Vec<String> = env::args().collect();
-    match "13" {
+    match "14" {
         "1" => {
             println!("\nDay1:");
             day1::day1();
@@ -71,6 +72,10 @@ fn main() {
         "13" => {
             println!("\nDay13:");
             day13::day13();
+        }
+        "14" => {
+            println!("\nDay14:");
+            day14::day14();
         }
         _ => panic!()
     }
